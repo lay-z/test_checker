@@ -90,3 +90,6 @@ ENV/
 
 # Config settings
 config.py
+
+# error_images
+error_images/
