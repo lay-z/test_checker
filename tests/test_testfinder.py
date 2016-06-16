@@ -101,3 +101,35 @@ class TestScrapeTimes(TestCase):
 			expected = datetime(2016, 9, 13, 11, 21)
 
 			self.assertEqual(times[1]["datetime"], expected)
+
+
+
+class TestFormatTimes(TestCase):
+	def test_should_produce_message_of_less_that_160_characters(self):
+		t = TestFinder(None, None, None, debug=True)
+		times = [	
+			{'datetime': datetime(2016, 9, 13, 13, 25)},
+			{'datetime': datetime(2016, 9, 13, 13, 45)},
+			{'datetime': datetime(2016, 9, 13, 14, 22)},
+			{'datetime': datetime(2016, 9, 13, 14, 42)},
+			{'datetime': datetime(2016, 9, 14, 13, 25)},
+			{'datetime': datetime(2016, 9, 14, 13, 45)},
+			{'datetime': datetime(2016, 9, 14, 14, 22)},
+			{'datetime': datetime(2016, 9, 14, 14, 42)},
+			{'datetime': datetime(2016, 9, 15, 10, 4)},
+			{'datetime': datetime(2016, 9, 15, 10, 24)},
+			{'datetime': datetime(2016, 9, 15, 11, 1)},
+			{'datetime': datetime(2016, 9, 15, 11, 21)},
+			{'datetime': datetime(2016, 9, 15, 13, 25)},
+			{'datetime': datetime(2016, 9, 15, 13, 45)},
+			{'datetime': datetime(2016, 9, 15, 14, 22)},
+			{'datetime': datetime(2016, 9, 15, 14, 42)},
+			{'datetime': datetime(2016, 9, 16, 14, 22)},
+			{'datetime': datetime(2016, 9, 16, 14, 42)},
+			{'datetime': datetime(2016, 9, 19, 10, 4)},
+			{'datetime': datetime(2016, 9, 19, 10, 24)}
+		]
+
+		m = t.format_times(times)
+		print(m)
+		self.assertLessEqual(len(m), 160)

@@ -57,7 +57,7 @@ class TestFinder():
         before_date = self.user.get("before_date", times[-1]["datetime"])
         # default to Set early time (4 in the morning)
         start_time = self.user.get("start_time", time(4, 0))
-        # defaults to super late time (11 night)
+        # Set late time (11 night)
         end_time = self.user.get("end_time", time(23, 0))
         return_times = []
 
@@ -72,6 +72,19 @@ class TestFinder():
 
         return return_times
 
+    def format_times(self, times):
+        """
+        Converts potential times into textable option
+        """
+        message = "Available Times:\n"
+        i = 0
+        while len(message) < 140:
+            message += "{}) {}\n".format(i, times[i]["datetime"]
+                                         .strftime("%a %d %b %H:%M"))
+            i += 1
+
+        return message
+
     def main(self):
         self.driver.get("https://driverpracticaltest.direct.gov.uk/login")
 
@@ -83,8 +96,15 @@ class TestFinder():
         self.select_earliest_available_test_date()
 
         times = self.scrape(self.driver.page_source)
+
+        times = self.filter_times(times)
         if self.DEBUG:
             print(times)
+
+        if times:
+            m = self.format_times(times)
+            self.send_message(m)
+
 
     def login(self):
         if self.DEBUG:
@@ -126,7 +146,9 @@ if __name__ == '__main__':
         "license_number": DRIVING_LICENSE_NUMBER,
         "application_reference": APPLICATION_REFERENCE_NUMBER,
         "phone_number": "+447528149491",
-        "last_acceptable_date": datetime(2016, 8, 20)
+        "before_date": datetime(2016, 7, 01),
+        "start_time": time(10),
+        "end_time": time(12)
     }
     tester = TestFinder(user, debug=True)
     try:
